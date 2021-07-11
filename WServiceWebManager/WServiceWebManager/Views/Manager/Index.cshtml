@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+    Layout = null;
+}
+
+@model List<ServiceModel>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-theme.css" rel="stylesheet" />
+    <script src="~/js/jquery1.12.4.js"></script>
+    <script src="~/js/bootstrap.js"></script>
+    <script src="~/lib/layer/layer.js"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <h3>
+                    Windows服务管理
+                </h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                服务标识的名称
+                            </th>
+                            <th>
+                                服务的友好名称
+                            </th>
+                            <th>
+                                状态
+                            </th>
+                            <th>
+                                操作
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int count = Model.Count;
+
+                            for (int i = 0; i < count; i++)
+                            {
+                                string dname = Model[i].DisplayName.Trim();
+                                string sname = Model[i].ServiceName.Trim();
+                                string isRun = Model[i].IsRunning ? "运行中" : "停止中";
+
+                                <tr>
+                                    <td>
+                                        @dname
+                                    </td>
+                                    <td>
+                                        @sname
+                                    </td>
+                                    <td>
+                                        @isRun
+
+                                    </td>
+                                    <td>
+                                        @if (@Model[i].IsRunning)
+                                        {
+                                            <button class="btn btn-danger" id="stop@(sname)Service" onclick="stopService(this)" data-sname="@(sname)" type="button">
+                                                停止
+                                            </button>
+
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-success" id="start@(sname)Service" onclick="startService(this)" data-sname="@(sname)" type="button">
+                                                启动
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        var ApiUrl = "https://localhost:44371/";
+        function startService(obj) {
+
+            var sname = $(obj).data("sname").trim();
+            $.ajax({
+                type: "post",
+                url: ApiUrl+"api/ServiceManager/ServiceOp",
+                data: JSON.stringify({ "serviceName": sname, "type": "start" }),
+                contentType: "application/json",
+                success: function (result) {
+                    if (result == "ok") {
+                        window.location.reload();
+                    }
+
+                }
+            });
+        }
+
+
+        function stopService(obj) {
+            var sname = $(obj).data("sname").trim();
+            $.ajax({
+                type: "post",
+                url: ApiUrl +"api/ServiceManager/ServiceOp",
+                data: JSON.stringify({ "serviceName": sname, "type": "stop" }),
+                contentType: "application/json",
+                success: function (result) {
+                    if (result == "ok") {
+                        window.location.reload();
+                    } else {
+                        layer.alert(result, { icon: 2 });
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
