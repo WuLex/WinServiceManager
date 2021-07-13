@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "VWPqFbe05fNRjL9pw5nZ4jH3StGtI1CwIcV2M7YTLDMiypDDsqAjfZyaydmC8mexzdEgrUCkAKQaTz+HBE8xeg==",
+  "dgSpecHash": "Mn+Trev9ULyspRDYdtlOiWZ7eLNOnr44ih6dlegMDvYs8TitAZedpRGLOzqzcAajUldczDVy0Oeizt/cpOR+kg==",
   "success": true,
-  "projectFilePath": "E:\\workproject\\zanshiTest\\WServiceWebManager\\WServiceWebManager\\WServiceWebManager.csproj",
+  "projectFilePath": "D:\\mywebproject\\WinServiceManager\\WServiceWebManager\\WServiceWebManager\\WServiceWebManager.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\acer\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
-    "C:\\Users\\acer\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
-    "C:\\Users\\acer\\.nuget\\packages\\system.diagnostics.eventlog\\5.0.0\\system.diagnostics.eventlog.5.0.0.nupkg.sha512",
-    "C:\\Users\\acer\\.nuget\\packages\\system.security.accesscontrol\\5.0.0\\system.security.accesscontrol.5.0.0.nupkg.sha512",
-    "C:\\Users\\acer\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512",
-    "C:\\Users\\acer\\.nuget\\packages\\system.serviceprocess.servicecontroller\\5.0.0\\system.serviceprocess.servicecontroller.5.0.0.nupkg.sha512"
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\system.diagnostics.eventlog\\5.0.0\\system.diagnostics.eventlog.5.0.0.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\system.security.accesscontrol\\5.0.0\\system.security.accesscontrol.5.0.0.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\system.serviceprocess.servicecontroller\\5.0.0\\system.serviceprocess.servicecontroller.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }

@@ -24,14 +24,7 @@ namespace WServiceWebManager.Controllers
                     ServiceModel model = new ServiceModel();
                     model.ServiceName = item.ServiceName;
                     model.DisplayName = item.DisplayName;
-                    if (item.Status == ServiceControllerStatus.Running)
-                    {
-                        model.IsRunning = true;
-                    }
-                    else
-                    {
-                        model.IsRunning = false;
-                    }
+                    model.IsRunning = item.Status == ServiceControllerStatus.Running;
                     list.Add(model);
                 }
             }

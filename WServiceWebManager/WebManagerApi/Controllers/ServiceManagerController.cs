@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
+using WebManagerApi.Common;
 using WebManagerApi.Models;
 
 namespace WebManagerApi.Controllers
@@ -14,8 +16,7 @@ namespace WebManagerApi.Controllers
     public class ServiceManagerController : ControllerBase
     {
         public ServiceManagerController()
-        { 
-        
+        {
         }
 
         [HttpPost]
@@ -34,10 +35,10 @@ namespace WebManagerApi.Controllers
                 switch (type)
                 {
                     case "start":
-                        StartService(serviceName);
+                        StartServiceByCmd(serviceName);
                         break;
                     case "stop":
-                        StopService(serviceName);
+                        StopServiceByCmd(serviceName);
                         break;
                     case "reset":
                         ResetService(serviceName);
@@ -55,7 +56,6 @@ namespace WebManagerApi.Controllers
                 return ex.Message;
                 //HttpContext.Response.WriteAsync(ex.Message);
             }
-
         }
 
 
@@ -65,12 +65,19 @@ namespace WebManagerApi.Controllers
         /// <param name="serviceName">服务名</param>
         private void StartService(string serviceName)
         {
-            ServiceController service = new ServiceController(serviceName);
-            if (service.Status == ServiceControllerStatus.Stopped)
+            if (!SysSecurity.IsAdministrator())
             {
-                service.Start();
-                service.WaitForStatus(ServiceControllerStatus.Running);
-                service.Close();
+                SysSecurity.RunProcess(serviceName, null);
+            }
+            else
+            {
+                ServiceController service = new ServiceController(serviceName);
+                if (service.Status == ServiceControllerStatus.Stopped)
+                {
+                    service.Start();
+                    service.WaitForStatus(ServiceControllerStatus.Running);
+                    service.Close();
+                }
             }
         }
 
@@ -80,14 +87,59 @@ namespace WebManagerApi.Controllers
         /// <param name="serviceName">服务名</param>
         private void StopService(string serviceName)
         {
-            ServiceController service = new ServiceController(serviceName);
-            if (service.Status == ServiceControllerStatus.Running)
+            if (!SysSecurity.IsAdministrator())
             {
-                service.Stop();
-                service.WaitForStatus(ServiceControllerStatus.Stopped);
-                service.Close();
+                SysSecurity.RunProcess(serviceName, null);
+            }
+            else
+            {
+                ServiceController service = new ServiceController(serviceName);
+                if (service.Status == ServiceControllerStatus.Running)
+                {
+                    service.Stop();
+                    service.WaitForStatus(ServiceControllerStatus.Stopped);
+                    service.Close();
+                }
             }
         }
+
+
+        /// <summary>
+        /// 通过Cmd启动服务
+        /// </summary>
+        /// <param name="serviceName">服务名</param>
+        private void StartServiceByCmd(string serviceName)
+        {
+            Process proc = new Process();
+            proc.StartInfo.CreateNoWindow = true;
+            proc.StartInfo.FileName = "cmd.exe";
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardError = true;
+            proc.StartInfo.RedirectStandardInput = true;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.Start();
+            proc.StandardInput.WriteLine("net start " + serviceName);
+            proc.Close();
+        }
+
+        /// <summary>
+        /// 通过Cmd停止服务
+        /// </summary>
+        /// <param name="serviceName">服务名</param>
+        private void StopServiceByCmd(string serviceName)
+        {
+            Process proc = new Process();
+            proc.StartInfo.CreateNoWindow = true;
+            proc.StartInfo.FileName = "cmd.exe";
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardError = true;
+            proc.StartInfo.RedirectStandardInput = true;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.Start();
+            proc.StandardInput.WriteLine("net stop " + serviceName);
+            proc.Close();
+        }
+
 
         /// <summary>
         /// 重启服务
@@ -106,6 +158,4 @@ namespace WebManagerApi.Controllers
             }
         }
     }
-
-
 }

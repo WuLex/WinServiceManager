@@ -922,23 +922,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\acer\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\workproject\\zanshiTest\\WServiceWebManager\\WebManagerApi\\WebManagerApi.csproj",
+      "projectUniqueName": "D:\\mywebproject\\WinServiceManager\\WServiceWebManager\\WebManagerApi\\WebManagerApi.csproj",
       "projectName": "WebManagerApi",
-      "projectPath": "E:\\workproject\\zanshiTest\\WServiceWebManager\\WebManagerApi\\WebManagerApi.csproj",
-      "packagesPath": "C:\\Users\\acer\\.nuget\\packages\\",
-      "outputPath": "E:\\workproject\\zanshiTest\\WServiceWebManager\\WebManagerApi\\obj\\",
+      "projectPath": "D:\\mywebproject\\WinServiceManager\\WServiceWebManager\\WebManagerApi\\WebManagerApi.csproj",
+      "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+      "outputPath": "D:\\mywebproject\\WinServiceManager\\WServiceWebManager\\WebManagerApi\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1005,7 +1001,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }
