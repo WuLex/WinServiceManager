@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.ServiceProcess;
-using System.Threading.Tasks;
-using WebManagerApi.Common;
 using WebManagerApi.Models;
 
 namespace WebManagerApi.Controllers
@@ -24,10 +19,11 @@ namespace WebManagerApi.Controllers
         {
             //服务名
             string serviceName = serviceModelDto.ServiceName;
-            //string serviceName = HttpContext.Request.Query["serviceName"];
+
             //操作类型【重启、停止、重启】
             string type = serviceModelDto.Type;
 
+            //string serviceName = HttpContext.Request.Query["serviceName"];
             //string type = HttpContext.Request.Query["type"];
 
             try
@@ -35,16 +31,21 @@ namespace WebManagerApi.Controllers
                 switch (type)
                 {
                     case "start":
-                        StartServiceByCmd(serviceName);
+                        StartService(serviceName);
+                        //StartServiceByCmd(serviceName);
                         break;
+
                     case "stop":
-                        StopServiceByCmd(serviceName);
+                        StopService(serviceName);
+                        //StopServiceByCmd(serviceName);
                         break;
+
                     case "reset":
                         ResetService(serviceName);
                         break;
+
                     default:
-                        ResetService(serviceName);
+                        //ResetService(serviceName);
                         break;
                 }
 
@@ -58,27 +59,28 @@ namespace WebManagerApi.Controllers
             }
         }
 
-
         /// <summary>
         /// 启动服务
         /// </summary>
         /// <param name="serviceName">服务名</param>
-        private void StartService(string serviceName)
+        private void StartService(string serviceName, int timeoutMilliseconds = 60000)
         {
-            if (!SysSecurity.IsAdministrator())
+            ServiceController service = new ServiceController(serviceName);
+            if (service.Status == ServiceControllerStatus.Stopped)
             {
-                SysSecurity.RunProcess(serviceName, null);
+                TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+                service.Start();
+                service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                service.Close();
             }
-            else
-            {
-                ServiceController service = new ServiceController(serviceName);
-                if (service.Status == ServiceControllerStatus.Stopped)
-                {
-                    service.Start();
-                    service.WaitForStatus(ServiceControllerStatus.Running);
-                    service.Close();
-                }
-            }
+
+            //if (!SysSecurity.IsAdministrator())
+            //{
+            //    SysSecurity.RunProcess(serviceName, null);
+            //}
+            //else
+            //{
+            //}
         }
 
         /// <summary>
@@ -87,13 +89,8 @@ namespace WebManagerApi.Controllers
         /// <param name="serviceName">服务名</param>
         private void StopService(string serviceName)
         {
-            if (!SysSecurity.IsAdministrator())
+            using (ServiceController service = new ServiceController(serviceName))
             {
-                SysSecurity.RunProcess(serviceName, null);
-            }
-            else
-            {
-                ServiceController service = new ServiceController(serviceName);
                 if (service.Status == ServiceControllerStatus.Running)
                 {
                     service.Stop();
@@ -101,8 +98,54 @@ namespace WebManagerApi.Controllers
                     service.Close();
                 }
             }
+            //if (!SysSecurity.IsAdministrator())
+            //{
+            //    SysSecurity.RunProcess(serviceName, null);
+            //}
+            //else
+            //{
+            //}
         }
 
+        [HttpPost]
+        public void ContinueService(string serviceName, int timeoutMilliseconds)
+        {
+            ServiceController service = new ServiceController(serviceName);
+            try
+            {
+                if (service.Status == ServiceControllerStatus.Paused)
+                {
+                    TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+
+                    service.Continue();
+                    service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public void PauseService(string serviceName, int timeoutMilliseconds)
+        {
+            ServiceController service = new ServiceController(serviceName);
+            try
+            {
+                if (service.Status == ServiceControllerStatus.Running)
+                {
+                    TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+
+                    service.Pause();
+                    service.WaitForStatus(ServiceControllerStatus.Paused, timeout);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// 通过Cmd启动服务
@@ -139,7 +182,6 @@ namespace WebManagerApi.Controllers
             proc.StandardInput.WriteLine("net stop " + serviceName);
             proc.Close();
         }
-
 
         /// <summary>
         /// 重启服务
